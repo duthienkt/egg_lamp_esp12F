@@ -10,7 +10,7 @@ const char* password = "ad2h3ttt";
 
 #define L_RED D1  
 #define L_GREEN D2 
-#define L_BLUE D8 2
+#define L_BLUE D8 
 
 #define R_RED D5
 #define R_GREEN D6
@@ -91,6 +91,7 @@ void setup()
 
   pinMode(LED, OUTPUT);
   autoColor();
+  WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED)
   {
@@ -98,6 +99,7 @@ void setup()
     autoColor();
   }
   delay(500);
+  WiFi.setAutoReconnect(true);
   alert(100, 100, 5);
   server.begin();
   // maximum length of string is 1023
@@ -173,7 +175,7 @@ void handleClient()
           stdbd_print("\r\n");
           // Display the HTML web page
 
-          stdbd_print("{ \"id\":\"EagleSaysScreech\"");
+          stdbd_print("{ \"id\":\"Meow\"");
 
           if (newColorCodeIndex >= 5)
           {
