@@ -1,29 +1,246 @@
-(function(){
-                    var t = new Date(1545836932121);
-                    var t1 = new Date();
-                    function pad(x){
-                        if (x<10) x = '0' + x;
-                        else x = ''+x;
-                        return x;
-                    }
-                    function mill2hhmmss(t){
-                        var s = Math.floor(t/1000);
-                        var h = Math.floor(s/3600);
-                        var m = Math.floor((s%3600)/60);
-                        var s = s%60;
-                        return pad(h)+':'+pad(m)+':'+pad(s);
-                    }
-                    var me = document.currentScript;
+(function () {
+    var t = new Date(1547195661824);
+    var t1 = new Date();
+    function pad(x) {
+        if (x < 10) x = '0' + x;
+        else x = '' + x;
+        return x;
+    }
+    function mill2hhmmss(t) {
+        var s = Math.floor(t / 1000);
+        var h = Math.floor(s / 3600);
+        var m = Math.floor((s % 3600) / 60);
+        var s = s % 60;
+        return pad(h) + ':' + pad(m) + ':' + pad(s);
+    }
+    var me = document.currentScript;
 
-                    console.log('\n %c %c %c absol ' + '  \u2730 ' + mill2hhmmss(t1.getTime() - t.getTime())  + ' \u2730  %c  %c  '+ me.src + '  %c %c \u272E%c\u272F%c\u272C \n\n', 'background: #d0d0ec; padding:5px 0;', 'background:  #d0d0ec; padding:5px 0;', 'color:  #d0d0ec; background: #898991; padding:5px 0;', 'background: #d0d0ec; padding:5px 0;', 'background: #dae6fc; padding:5px 0;', 'background: #d0d0ec; padding:5px 0;', 'color: #000080; background: #fff; padding:5px 0;', 'color: #000099; background: #fff; padding:5px 0;', 'color: #000099; background: #fff; padding:5px 0;');
-                })();
+    console.log('\n %c %c %c absol ' + '  \u2730 ' + mill2hhmmss(t1.getTime() - t.getTime()) + ' \u2730  %c  %c  ' + me.src + '  %c %c \u272E%c\u272F%c\u272C \n\n', 'background: #d0d0ec; padding:5px 0;', 'background:  #d0d0ec; padding:5px 0;', 'color:  #d0d0ec; background: #898991; padding:5px 0;', 'background: #d0d0ec; padding:5px 0;', 'background: #dae6fc; padding:5px 0;', 'background: #d0d0ec; padding:5px 0;', 'color: #000080; background: #fff; padding:5px 0;', 'color: #000099; background: #fff; padding:5px 0;', 'color: #000099; background: #fff; padding:5px 0;');
+})();
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                          //
+//                                 POLYFILL                                                 //
+//                                                                                          //
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+!function (e, n) { "object" == typeof exports && "undefined" != typeof module ? n() : "function" == typeof define && define.amd ? define(n) : n() }(0, function () { "use strict"; function e(e) { var n = this.constructor; return this.then(function (t) { return n.resolve(e()).then(function () { return t }) }, function (t) { return n.resolve(e()).then(function () { return n.reject(t) }) }) } function n() { } function t(e) { if (!(this instanceof t)) throw new TypeError("Promises must be constructed via new"); if ("function" != typeof e) throw new TypeError("not a function"); this._state = 0, this._handled = !1, this._value = undefined, this._deferreds = [], u(e, this) } function o(e, n) { for (; 3 === e._state;)e = e._value; 0 !== e._state ? (e._handled = !0, t._immediateFn(function () { var t = 1 === e._state ? n.onFulfilled : n.onRejected; if (null !== t) { var o; try { o = t(e._value) } catch (f) { return void i(n.promise, f) } r(n.promise, o) } else (1 === e._state ? r : i)(n.promise, e._value) })) : e._deferreds.push(n) } function r(e, n) { try { if (n === e) throw new TypeError("A promise cannot be resolved with itself."); if (n && ("object" == typeof n || "function" == typeof n)) { var o = n.then; if (n instanceof t) return e._state = 3, e._value = n, void f(e); if ("function" == typeof o) return void u(function (e, n) { return function () { e.apply(n, arguments) } }(o, n), e) } e._state = 1, e._value = n, f(e) } catch (r) { i(e, r) } } function i(e, n) { e._state = 2, e._value = n, f(e) } function f(e) { 2 === e._state && 0 === e._deferreds.length && t._immediateFn(function () { e._handled || t._unhandledRejectionFn(e._value) }); for (var n = 0, r = e._deferreds.length; r > n; n++)o(e, e._deferreds[n]); e._deferreds = null } function u(e, n) { var t = !1; try { e(function (e) { t || (t = !0, r(n, e)) }, function (e) { t || (t = !0, i(n, e)) }) } catch (o) { if (t) return; t = !0, i(n, o) } } var c = setTimeout; t.prototype["catch"] = function (e) { return this.then(null, e) }, t.prototype.then = function (e, t) { var r = new this.constructor(n); return o(this, new function (e, n, t) { this.onFulfilled = "function" == typeof e ? e : null, this.onRejected = "function" == typeof n ? n : null, this.promise = t }(e, t, r)), r }, t.prototype["finally"] = e, t.all = function (e) { return new t(function (n, t) { function o(e, f) { try { if (f && ("object" == typeof f || "function" == typeof f)) { var u = f.then; if ("function" == typeof u) return void u.call(f, function (n) { o(e, n) }, t) } r[e] = f, 0 == --i && n(r) } catch (c) { t(c) } } if (!e || "undefined" == typeof e.length) throw new TypeError("Promise.all accepts an array"); var r = Array.prototype.slice.call(e); if (0 === r.length) return n([]); for (var i = r.length, f = 0; r.length > f; f++)o(f, r[f]) }) }, t.resolve = function (e) { return e && "object" == typeof e && e.constructor === t ? e : new t(function (n) { n(e) }) }, t.reject = function (e) { return new t(function (n, t) { t(e) }) }, t.race = function (e) { return new t(function (n, t) { for (var o = 0, r = e.length; r > o; o++)e[o].then(n, t) }) }, t._immediateFn = "function" == typeof setImmediate && function (e) { setImmediate(e) } || function (e) { c(e, 0) }, t._unhandledRejectionFn = function (e) { void 0 !== console && console && console.warn("Possible Unhandled Promise Rejection:", e) }; var l = function () { if ("undefined" != typeof self) return self; if ("undefined" != typeof window) return window; if ("undefined" != typeof global) return global; throw Error("unable to locate global object") }(); "Promise" in l ? l.Promise.prototype["finally"] || (l.Promise.prototype["finally"] = e) : l.Promise = t });
+
+
+(function () {
+    var vendors = ['ms', 'moz', 'webkit', 'o'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame']
+            || window[vendors[x] + 'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function (callback, element) {
+            var id = window.setTimeout(function () { callback(element); },
+                1000 / 60);
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function (id) {
+            clearTimeout(id);
+        };
+}());
+
+
+if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function (search, pos) {
+        return this.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
+    };
+}
+
+
+if (!Object.merge) {
+    Object.merge = function () {
+        var res = arguments[0];
+        for (var i = 1; i < arguments.length; ++i) {
+            var o = arguments[i];
+            for (var key in o)
+                if (o[key] != undefined)
+                    res[key] = o[key];
+        }
+        return res;
+    }
+}
+
+
+if (!Object.assign) {
+    Object.assign = function () {
+        var res = arguments[0];
+        for (var i = 1; i < arguments.length; ++i) {
+            var o = arguments[i];
+            for (var key in o)
+                res[key] = o[key] != undefined ? o[key] : res[key];
+        }
+        return res;
+    }
+}
+
+if (!Array.prototype.fill) {
+    Object.defineProperty(Array.prototype, 'fill', {
+        value: function (value) {
+            if (this == null) {
+                throw new TypeError('this is null or not defined');
+            }
+            var O = Object(this);
+            var len = O.length >>> 0;
+            var start = arguments[1];
+            var relativeStart = start >> 0;
+            var k = relativeStart < 0 ?
+                Math.max(len + relativeStart, 0) :
+                Math.min(relativeStart, len);
+            var end = arguments[2];
+            var relativeEnd = end === undefined ?
+                len : end >> 0;
+            var final = relativeEnd < 0 ?
+                Math.max(len + relativeEnd, 0) :
+                Math.min(relativeEnd, len);
+            while (k < final) {
+                O[k] = value;
+                k++;
+            }
+            return O;
+        }
+    });
+}
+
+if (!Function.prototype.bind) {
+    Function.prototype.bind = function (oThis) {
+        if (typeof this !== 'function') {
+            // closest thing possible to the ECMAScript 5
+            // internal IsCallable function
+            throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+        }
+
+        var aArgs = Array.prototype.slice.call(arguments, 1),
+            fToBind = this,
+            fNOP = function () { },
+            fBound = function () {
+                return fToBind.apply(this instanceof fNOP
+                    ? this
+                    : oThis,
+                    aArgs.concat(Array.prototype.slice.call(arguments)));
+            };
+
+        if (this.prototype) {
+            // Function.prototype doesn't have a prototype property
+            fNOP.prototype = this.prototype;
+        }
+        fBound.prototype = new fNOP();
+
+        return fBound;
+    };
+}
+
+
 
 if (!window.module) window.module = {};
 
 var absol = {};
-absol._dirname = (document.currentScript.src.match(/.+\/\/(.+\/)/)||['./'])[0];
+absol._dirname = (document.currentScript.src.match(/.+\/\/(.+\/)/) || ['./'])[0];
 
 if (module) module.exports = absol;
+absol.OOP = {};
+
+/**
+ * @param {Object} object
+ * @param {Sttring} key
+ * @param {Function} method
+*/
+absol.OOP.overideMethod = function (object, key, method) {
+    if (object[key] === undefined) object[key] = method;
+    else {
+        var _superMethod = object[key];
+        object[key] = (function (_superMethod, method) {
+            return function () {
+                var _super = this.super;
+                this.super = _superMethod;
+                var result = method.apply(this, arguments);
+                this.super = _super;
+                return result;
+            };
+
+        })(_superMethod, method);
+    }
+};
+
+
+absol.OOP.extends = function (object, prototype) {
+    for (var key in prototype) {
+        absol.OOP.overideMethod(object, key, prototype[key]);
+    }
+};
+
+
+absol.OOP.drillProperty = function (topObject, botObject, keyTop, keyBot) {
+    if (typeof (keyTop) == 'string') {
+        keyBot = keyBot || keyTop;
+        Object.defineProperty(topObject, keyTop, {
+            set: function (value) {
+                botObject[keyBot] = value;
+            },
+            get: function () {
+                return botObject[keyBot];
+            }
+        });
+    }
+    else {
+        if (keyTop instanceof Array) {
+            for (var i = 0; i < keyTop.length; ++i) {
+                absol.OOP.drillProperty(topObject, botObject, keyTop[i], keyTop[i]);
+            }
+        }
+        else {
+            for (var key in keyTop) {
+                absol.OOP.drillProperty(topObject, botObject, key, keyTop[key]);
+            }
+        }
+    }
+};
+
+absol.OOP.bindFunctions = function (_this, handlers) {
+    var res = {};
+    for (var key in handlers) {
+        res[key] = handlers[key].bind(_this);
+    }
+    return res;
+};
+
+
+
+
+absol.OOP.inheritCreator = function (parent, child) {
+    if (child.property) {
+        if (parent.property) {
+            for (i in parent.property) {
+                if (!child.property[i]) child.property[i] = parent.property[i];
+            }
+        }
+    }
+    for (var i in parent.prototype) {
+        if (!child.prototype[i]) {
+            child.prototype[i] = parent.prototype[i];
+        }
+        else {
+            child.prototype[i] = (function (superFunction, childFunction) {
+                return function () {
+                    var _super = this.super;
+                    this.super = superFunction;
+                    var result = childFunction.apply(this, arguments);
+                    this.super = _super;
+                    return result;
+                }
+            })(parent.prototype[i], child.prototype[i]);
+        }
+    }
+};
 absol.EventEmittor = function EventEmittor() {
     this.absolInstanceOf = this.absolInstanceOf || {};
     if (this.absolInstanceOf['EventEmittor']) return;
@@ -52,12 +269,13 @@ absol.EventEmittor.prototype.isSupportedEvent = function (name) {
 
 
 absol.EventEmittor.prototype.emit = function (eventName, data) {
+    var others = Array.prototype.slice.call(arguments, 1);
     if (this.isSupportedEvent(eventName)) {
         var listenerList;
         if (this.extendEvents.prioritize[eventName]) {
             listenerList = this.extendEvents.prioritize[eventName].slice();
             for (var i = 0; i < listenerList.length; ++i) {
-                listenerList[i].wrappedCallback.call(this, data);
+                listenerList[i].wrappedCallback.apply(this, others);
             }
 
         }
@@ -65,7 +283,7 @@ absol.EventEmittor.prototype.emit = function (eventName, data) {
         if (this.extendEvents.nonprioritize[eventName]) {
             listenerList = this.extendEvents.nonprioritize[eventName].slice();
             for (var i = 0; i < listenerList.length; ++i) {
-                listenerList[i].wrappedCallback.call(this, data);
+                listenerList[i].wrappedCallback.apply(this, others);
             }
         }
     }
@@ -83,16 +301,16 @@ absol.EventEmittor.prototype.emit = function (eventName, data) {
 
 
 
-absol.EventEmittor.prototype.eventEmiitorOnWithTime = function (isOnce, arg0, arg1, arg2) {
+absol.EventEmittor.prototype.eventEmittorOnWithTime = function (isOnce, arg0, arg1, arg2) {
     if (typeof arg0 == 'object') {
-        for (let key in arg0) {
-            this.eventEmiitorOnWithTime(isOnce, key, arg0[key]);
+        for (var key in arg0) {
+            this.eventEmittorOnWithTime(isOnce, key, arg0[key]);
         }
         return this;
     }
     else {
         if (typeof arg1 == 'object') {
-            return this.eventEmiitorOnWithTime(isOnce, arg0, arg1.callback, arg1.cap);
+            return this.eventEmittorOnWithTime(isOnce, arg0, arg1.callback, arg1.cap);
         } else {
             var eventArr = this.extendEvents[arg2 ? 'prioritize' : 'nonprioritize'][arg0] || [];
             var eventIndex = -1;
@@ -127,7 +345,7 @@ absol.EventEmittor.prototype.eventEmiitorOnWithTime = function (isOnce, arg0, ar
                 eventArr.push(event);
                 this.extendEvents[arg2 ? 'prioritize' : 'nonprioritize'][arg0] = eventArr;
             }
-            else{
+            else {
                 console.warn("dupplicate event");
 
             }
@@ -140,19 +358,19 @@ absol.EventEmittor.prototype.eventEmiitorOnWithTime = function (isOnce, arg0, ar
 
 
 absol.EventEmittor.prototype.on = function (arg0, arg1, arg2) {
-    this.eventEmiitorOnWithTime(false, arg0, arg1, arg2);
+    this.eventEmittorOnWithTime(false, arg0, arg1, arg2);
     return this;
 };
 
 
 absol.EventEmittor.prototype.once = function (arg0, arg1, arg2) {
-    this.eventEmiitorOnWithTime(true, arg0, arg1, arg2);
+    this.eventEmittorOnWithTime(true, arg0, arg1, arg2);
     return this;
 };
 
 absol.EventEmittor.prototype.off = function (arg0, arg1, arg2) {
     if (typeof arg0 == 'object') {
-        for (let key in arg0) {
+        for (var key in arg0) {
             this.off(key, arg0[key]);
         }
         return this;
@@ -204,7 +422,7 @@ absol.HTMLElement.prototype.init = function (props) {
 
 absol.HTMLElement.prototype.attr = function (arg0, arg1) {
     if (typeof arg0 == 'object') {
-        for (let key in arg0) {
+        for (var key in arg0) {
             this.attr(key, arg0[key]);
         }
     }
@@ -221,9 +439,15 @@ absol.HTMLElement.prototype.attr = function (arg0, arg1) {
     return this;
 };
 
+absol.HTMLElement.prototype._styleIndex = function (string) {
+    return string.replace(/\-(.)/g, function (full, c) {
+        return c.toUpperCase();
+    })
+};
+
 absol.HTMLElement.prototype.addStyle = function (arg0, arg1) {
     if (typeof arg0 == 'string')
-        this.style[arg0] = arg1;
+        this.style[this._styleIndex(arg0)] = arg1;
     else {
         for (var key in arg0)
             this.addStyle(key, arg0[key]);
@@ -233,8 +457,9 @@ absol.HTMLElement.prototype.addStyle = function (arg0, arg1) {
 
 absol.HTMLElement.prototype.removeStyle = function (arg0) {
     if (typeof arg0 == 'string') {
-        this.style[arg0] = null;
-        delete this.style[arg0];
+        var key = this._styleIndex(arg0);
+        this.style[key] = null;
+        delete this.style[key];
     }
     else {
         if (typeof arg0 instanceof Array) {
@@ -329,7 +554,8 @@ absol.HTMLElement.prototype.clearChild = function () {
 absol.HTMLElement.prototype.containsClass = function (className) {
     if (className instanceof Array) {
         for (var i = 0; i < className.length; ++i)
-            if (!this.classList.remove(className[i])) return false;
+            if (!this.classList.containsClass(className[i])) return false;
+        return true;
     }
     else
         return this.classList.contains(className);
@@ -422,6 +648,8 @@ absol.HTMLElement.prototype.getBoundingRecursiveRect = function () {
     return matcher.findAll(this).reduce(function (ac, cr) {
         if (!cr.getBoundingClientRect) return ac;
         var cRect = cr.getBoundingClientRect();
+        //it not display
+        if (!cRect || cRect.width * cRect.height == 0) return ac;
         ac.left = Math.min(ac.left, cRect.left);
         ac.top = Math.min(ac.top, cRect.top);
         ac.bottom = Math.max(ac.bottom, cRect.bottom);
@@ -475,7 +703,7 @@ absol.HTMLElement.fixBrowserEvent = function (element) {
                         }
                     }
 
-                    event.preventDefault = function(){
+                    event.preventDefault = function () {
                         oldEvent.preventDefault();
                     }
                     if (!event.mozFixWheelScale) {
@@ -509,12 +737,12 @@ absol.ElementNS = function ElementNS() {
 
 absol.ElementNS.prototype.attr = function (arg0, arg1) {
     if (typeof arg0 == 'object') {
-        for (let key in arg0) {
+        for (var key in arg0) {
             this.attr(key, arg0[key]);
         }
     }
     else {
-        if (arguments.length == 1) return this.getAttribute(arg0);
+        if (arguments.length == 1) return this.getAttributeNS(null, arg0);
         if (arg1 == undefined) {
             this.removeAttributeNS(null, arg0);
         }
@@ -639,6 +867,18 @@ absol.dom.fontFaceIsLoaded = function (fontFace, timeout) {
 
 };
 
+absol.dom.getScreenSize = function () {
+    var width = window.innerWidth ||
+        document.documentElement.clientWidth ||
+        document.body.clientWidth;
+
+    var height = window.innerHeight ||
+        document.documentElement.clientHeight ||
+        document.body.clientHeight;
+
+    return { WIDTH: width, HEIGHT: height, width: width, height: height };
+};
+
 
 /********************  DOM EVOLUTION ******************/
 
@@ -672,7 +912,7 @@ absol.parseElementSelector = function (s) {
  * @returns {Object}
  */
 absol.revertDictionary = function (dic) {
-    let res = {};
+    var res = {};
     for (var key in dic) {
         if (dic[key] != undefined && ('' + dic[key]).length > 0)
             res['' + dic[key]] = key;
@@ -699,7 +939,7 @@ absol.isDomNode = function (o) {
  */
 absol.ElementMatcher = function (option) {
     option = option || {};
-    for (let key in option) {
+    for (var key in option) {
         this[key] = option[key];
     }
 }
@@ -721,7 +961,7 @@ absol.ElementMatcher.prototype.match = function (element) {
         if (!matchTag) return false;
     }
     if (this.class)
-        for (let i = 0; i < this.class.length; ++i) {
+        for (i = 0; i < this.class.length; ++i) {
             if (!element.classList || !element.classList.contains(this.class[i])) return false;
         }
     return true;
@@ -734,8 +974,8 @@ absol.ElementMatcher.prototype.match = function (element) {
 * @returns {Element} 
 */
 absol.ElementMatcher.prototype.findFirstBFS = function (root, onFound) {
-    let queue = [root];
-    let current;
+    var queue = [root];
+    var current;
     while (queue.length > 0) {
         current = queue.shift();
         if (this.match(current)) {
@@ -743,7 +983,7 @@ absol.ElementMatcher.prototype.findFirstBFS = function (root, onFound) {
                 return current;
         }
         if (current.childNodes) {
-            for (let i = 0; i < current.childNodes.length; ++i)
+            for (i = 0; i < current.childNodes.length; ++i)
                 queue.push(current.childNodes[i]);
         }
     }
@@ -754,8 +994,8 @@ absol.ElementMatcher.prototype.findFirstBFS = function (root, onFound) {
  * @param {Element} root 
  */
 absol.ElementMatcher.prototype.findFirstDFS = function (root, onFound) {
-    let stack = [root];
-    let current;
+    var stack = [root];
+    var current;
     while (stack.length > 0) {
         current = stack.pop();
         if (this.match(current)) {
@@ -763,7 +1003,7 @@ absol.ElementMatcher.prototype.findFirstDFS = function (root, onFound) {
                 return current;
         }
         if (current.childNodes) {
-            for (let i = 0; i < current.childNodes.length; ++i)
+            for (i = 0; i < current.childNodes.length; ++i)
                 stack.push(current.childNodes[i]);
         }
     }
@@ -776,14 +1016,14 @@ absol.ElementMatcher.prototype.findFirstDFS = function (root, onFound) {
  * @return {Array} 
  */
 absol.ElementMatcher.prototype.findAll = function (root) {
-    let res = [];
-    let stack = [root];
-    let current;
+    var res = [];
+    var stack = [root];
+    var current;
     while (stack.length > 0) {
         current = stack.pop();
         if (this.match(current)) res.push(current);
         if (current.childNodes) {
-            for (let i = 0; i < current.childNodes.length; ++i)
+            for (i = 0; i < current.childNodes.length; ++i)
                 stack.push(current.childNodes[i]);
         }
     }
@@ -854,7 +1094,7 @@ absol.Dom.prototype.attach = function (element) {
  * @param {Object} option
  * @returns {Element} 
  */
-absol.Dom.prototype.create = function (option) {
+absol.Dom.prototype.create = function (option, isInherited) {
     var res;
     var prototype;
     var property;
@@ -928,7 +1168,7 @@ absol.Dom.prototype.create = function (option) {
         }
     }
 
-    res.init(option.props);
+    if (!isInherited) res.init(option.props);
     return res;
 }
 
@@ -938,82 +1178,14 @@ absol.ShareCreator = {};
 absol.ShareDom = new absol.Dom({ creator: absol.ShareCreator });
 absol.$ = absol.ShareDom.$;
 absol._ = absol.ShareDom._;
-
-
+//long name of _
+absol.buildDom = absol.ShareDom._;
 absol.browser = {};
 
 absol.browser.isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
 absol.browser.isCococ = navigator.userAgent.toLowerCase().indexOf('coc_coc_browser') >= 1;
 absol.browser.isSafari = !absol.browser.isCococ && navigator.userAgent.toLowerCase().indexOf('safari') > -1 && navigator.userAgent.toLowerCase().indexOf('win') < 0;
 absol.browser.isMobile = navigator.userAgent.indexOf('KFFOWI') > -1 || navigator.userAgent.toLowerCase().indexOf('mobile') > -1;
-absol.OOP = {};
-
-/**
- * @param {Object} object
- * @param {Sttring} key
- * @param {Function} method
-*/
-absol.OOP.overideMethod = function (object, key, method) {
-    if (object[key] === undefined) object[key] = method;
-    else {
-        var _superMethod = object[key];
-        object[key] = (function (_superMethod, method) {
-            return function () {
-                var _super = this.super;
-                var _this = this;
-                this.super = function () {
-                    _superMethod.apply(_this, arguments)
-                }
-                method.apply(_this, arguments);
-                this.super = _super;
-            };
-
-        })(_superMethod, method);
-    }
-};
-
-
-absol.OOP.extends = function (object, prototype) {
-    for (var key in prototype) {
-        absol.OOP.overideMethod(object, key, prototype[key]);
-    }
-};
-
-
-absol.OOP.drillProperty = function (topObject, botObject, keyTop, keyBot) {
-    if (typeof (keyTop) == 'string') {
-        keyBot = keyBot || keyTop;
-        Object.defineProperty(topObject, keyTop, {
-            set: function (value) {
-                botObject[keyBot] = value;
-            },
-            get: function () {
-                return botObject[keyBot];
-            }
-        });
-    }
-    else {
-        if (keyTop instanceof Array) {
-            for (var i = 0; i < keyTop.length; ++i) {
-                absol.OOP.drillProperty(topObject, botObject, keyTop[i], keyTop[i]);
-            }
-        }
-        else {
-            for (var key in keyTop) {
-                absol.OOP.drillProperty(topObject, botObject, key, keyTop[key]);
-            }
-        }
-    }
-};
-
-absol.OOP.bindFunctions = function (_this, handlers) {
-    var res = {};
-    for (var key in handlers) {
-        res[key] = handlers[key].bind(_this);
-    }
-    return res;
-};
-
 
 /********************  SVG LIB ******************/
 
@@ -1090,12 +1262,26 @@ absol.Svg.prototype.attach = function (element) {
     absol.ElementNS.call(element);
 }
 
+
+absol.Svg.prototype.fromHTML = function (html) {
+    var receptacle = document.createElement('div');
+    if (html.startsWith('<svg')) {
+        receptacle.innerHTML = html;
+        return receptacle.childNodes[0];
+    }
+    else {
+        var svgfragment = '<svg  version="1.1" xmlns="http://www.w3.org/2000/svg">' + html + '</svg>';
+        receptacle.innerHTML = '' + svgfragment;
+        return receptacle.childNodes[0].childNodes[0];
+    }
+};
+
 /**
  * 
  * @param {Object} option
  * @returns {Element} 
  */
-absol.Svg.prototype.create = function (option) {
+absol.Svg.prototype.create = function (option, isInherited) {
     var res;
     var prototype;
     var property;
@@ -1107,11 +1293,8 @@ absol.Svg.prototype.create = function (option) {
         option = option.trim();
         if (option[0] == '<') {
             option = option.replace(/>\s+</gm, '><').trim();
-            var temTag = 'g';
-            if (option.startsWith('<svg')) temTag = 'div';
-            var tempContainer = temTag == 'div' ? document.createElement(temTag) : document.createElementNS(absol.svgNS, temTag);
-            tempContainer.innerHTML = option;
-            res = tempContainer.childNodes[0];
+
+            res = this.fromHTML(option);
         }
         else {
             var queryObj = absol.parseElementSelector(option);
@@ -1134,9 +1317,9 @@ absol.Svg.prototype.create = function (option) {
         }
     } else {
         option = option || {};
-        option.tag = option.tag || 'div';
+        option.tag = option.tag || 'g';
         if (!this.creator[option.tag]) {
-            res = document.createElement(option.tag);
+            res = document.createElementNS(absol.svgNS, option.tag);
             option.data && Object.assign(res, option.data);
         }
         else {
@@ -1170,15 +1353,20 @@ absol.Svg.prototype.create = function (option) {
         absol.OOP.extends(res, prototype);
     }
 
-    if (res.init) res.init(option.props);
+    if (!isInherited && res.init) res.init(option.props);
     return res;
 }
 
 
 
-absol.ShareSvgCreator = {};
+absol.ShareSvgCreator = {
+    svg: function () {
+        var temp = document.createElement('div');
+        temp.innerHTML = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>';
+        return temp.childNodes[0];
+    }
+};
 absol.ShareSvg = new absol.Svg({ creator: absol.ShareSvgCreator });
 absol._svg = absol.ShareSvg._;
 absol.$svg = absol.ShareSvg.$;
-
-
+absol.buildSvg = absol.ShareSvg._;

@@ -1,5 +1,5 @@
 (function(){
-                    var t = new Date(1545623970044);
+                    var t = new Date(1545988007838);
                     var t1 = new Date();
                     function pad(x){
                         if (x<10) x = '0' + x;
@@ -175,8 +175,7 @@ absol.net.PostRequest = function (url, body, responseType, success, failure) {
         var shouldBeAsync = true;
 
         var request = new XMLHttpRequest();
-        request.responseType = responseType || '';
-
+        
         request.onreadystatechange = function () {
             if (request.readyState == 4) {
                 if (request.status == 200) {
@@ -188,12 +187,13 @@ absol.net.PostRequest = function (url, body, responseType, success, failure) {
                 // rj({ status: request.status, statusText: request.statusText });
             }
         };
-
+        
         request.onerror = function () {
             rj(new Error("Network Error!"));
         }
-
+        
         request.open(method, url, shouldBeAsync);
+        request.responseType = responseType || '';
 
         request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
@@ -217,8 +217,8 @@ absol.net.PostRequest = function (url, body, responseType, success, failure) {
 absol.net.GetRequest = function (url, props, success, failure) {
     return new Promise(function (rs, rj) {
         var request = absol.net.makeHttpObject();
-        Object.assign(request, props);
         request.open("GET", url, true);
+        Object.assign(request, props);
         request.send(null);
         request.onreadystatechange = function () {
             if (request.readyState == 4) {
@@ -240,13 +240,6 @@ absol.net.GetRequest = function (url, props, success, failure) {
         }
     });
 };
-
-
-
-
-
-
-
 
 
 absol.net.TextHttpGetRequest = function (url, success, failure) {
@@ -300,14 +293,14 @@ absol.net.getFileNameFromXHR = function (xhr) {
 absol.net.download = function (url, filename, onDownloading) {
     return new Promise(function (resolve, reject) {
         var xhr = absol.net.makeHttpObject();
-        xhr.responseType = 'blob';
         xhr.open("GET", url, true);
+        xhr.responseType = 'blob';
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4) {
                 if (xhr.status == 200) {
                     var urlBlob = URL.createObjectURL(xhr.response);
                     filename = filename || absol.net.getFileNameFromXHR(xhr);
-                    var a = absol._(`<a href="${urlBlob}" style="display:none;"  download="${filename || ''}"></a>`);
+                    var a = absol._(['<a href="',urlBlob,'" style="display:none;"  download="',filename || '','"></a>'].join(''));
                     absol.$('body').addChild(a);
                     a.click();
                     a.selfRemove();

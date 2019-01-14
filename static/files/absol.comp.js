@@ -1,5 +1,5 @@
 (function(){
-                    var t = new Date(1545908702464);
+                    var t = new Date(1545999254094);
                     var t1 = new Date();
                     function pad(x){
                         if (x<10) x = '0' + x;
@@ -18,12 +18,16 @@
                     console.log('\n %c %c %c absol.comp ' + '  \u2730 ' + mill2hhmmss(t1.getTime() - t.getTime())  + ' \u2730  %c  %c  '+ me.src + '  %c %c \u272E%c\u272F%c\u272C \n\n', 'background: #d0d0ec; padding:5px 0;', 'background:  #d0d0ec; padding:5px 0;', 'color:  #d0d0ec; background: #898991; padding:5px 0;', 'background: #d0d0ec; padding:5px 0;', 'background: #dae6fc; padding:5px 0;', 'background: #d0d0ec; padding:5px 0;', 'color: #000080; background: #fff; padding:5px 0;', 'color: #000099; background: #fff; padding:5px 0;', 'color: #000099; background: #fff; padding:5px 0;');
                 })();
 var absol_comp_css = [
-'',
 '/******************  Trackbar    *****************************/',
 '.absol-trackbar {',
 '    height: 1.2em;',
 '    min-width: 7em;',
 '    display: inline-block;',
+'    -webkit-touch-callout: none;',
+'    -webkit-user-select: none;',
+'    -khtml-user-select: none;',
+'    -moz-user-select: none;',
+'    -ms-user-select: none;',
 '    user-select: none;',
 '    padding: 0 0.6em;',
 '    box-sizing: border-box;',
@@ -307,7 +311,7 @@ var absol_comp_css = [
 '/*********************  radio   *****************************************/',
 '/* ',
 '.absol-radio { */',
-'    /* display: inline-block;',
+'/* display: inline-block;',
 '}',
 '.absol-radio label {',
 '    text-decoration: none;',
@@ -347,7 +351,6 @@ var absol_comp_css = [
 '    border: 1px solid black;',
 '    margin-top: -0.2em;',
 '    margin-bottom: -0.2em;',
-'   ',
 '    border-radius: 50%;',
 '    box-shadow: inset 0 1px 3px rgba(0, 0, 0, .1);',
 '}',
@@ -405,7 +408,41 @@ var absol_comp_css = [
 '.absol-radio label:hover:before {',
 '    background: #cccccc;',
 '} */',
-''
+'.absol-radio {',
+'    display: inline;',
+'}',
+'.absol-radio input {',
+'    display: none;',
+'}',
+'.absol-radio>* {',
+'    display: inline-block;',
+'    vertical-align: middle;',
+'}',
+'.absol-radio-icon .border {}',
+'.absol-radio .dot {',
+'    transition: r 0.07s;',
+'    opacity: 0;',
+'}',
+'.absol-radio.checked .dot {',
+'    opacity: 1;',
+'    transition: opacity 0.1s;',
+'}',
+'/* ',
+'   .bsc-radio:not(.checked) .dot{',
+'    display:none;',
+'  }  */',
+'.absol-radio:not(.right) .absol-radio-icon-right {',
+'    display: none;',
+'}',
+'.absol-radio:not(.right) label {',
+'    padding-left: 5px;',
+'}',
+'.absol-radio.right label {',
+'    padding-right: 5px;',
+'}',
+'.absol-radio.right .absol-radio-icon-left {',
+'    display: none;',
+'}'
 ].join('\n');
 var absol_comp_style = document.createElement('style');
 absol_comp_style.setAttribute('id', 'absol_comp_css');
@@ -670,7 +707,6 @@ absol.ShareCreator.modal.prototype._update = function () {
 
 
 
-
 absol.ShareCreator.modal.property = {};
 absol.ShareCreator.modal.property.show = {
     set: function (value) {
@@ -911,77 +947,30 @@ absol.ShareCreator.checkbox.eventHandler.click = function (event) {
 
 
 
-// absol.ShareCreator.radio = function () {
-//     var _ = absol._;
-//     var $ = absol.$;
-//     var id = 'input' + Math.random().toFixed(6).replace(/\./g, '');
-//     var res = _({
-//         class: ['absol-radio', 'left'],
-//         extendEvent: 'change',
-//         child: [
-//             {
-//                 tag: 'input',
-//                 attr: { type: 'radio', id: id },
-//             },
-//             {
-//                 tag: 'label',
-//                 attr: { for: id }
-//             }
-//         ]
-//     });
-//     res.$input = $('input', res);
-//     res.$label = $('label', res);
-
-//     res.on('click', absol.ShareCreator.radio.eventHandler.click.bind(res));
-
-//     absol.OOP.drillProperty(res, res.$input, 'checked');
-//     absol.OOP.drillProperty(res, res.$label, 'text', 'innerHTML');
-//     return res;
-// };
-
-// //v, labelText, checked
-
-// absol.ShareCreator.radio.property = Object.assign({}, absol.ShareCreator.checkbox.property);
-// absol.ShareCreator.radio.property.name = {
-//     set: function (name) {
-//         this.$input.setAttribute('name', name);
-
-//     },
-//     get: function () {
-//         return this.$input.getAttribute('name');
-//     }
-// };
-
-// absol.ShareCreator.radio.prototype.init = function (props) {
-//     this.super(props);
-// }
-
-// absol.ShareCreator.radio.eventHandler = Object.assign({}, absol.ShareCreator.checkbox.eventHandler);
-
 
 absol.ShareCreator.radio = function () {
     var _ = absol._;
     var $ = absol.$;
-    var id = 'input' + Math.random().toFixed(6).replace(/\./g, '');//for="${id}"
-    var res = _(`
-    <div class="absol-radio">
-        <input type="radio" id="${id}" />
-        <svg class="absol-radio-icon absol-radio-icon-left" width="20" height="20" version="1.1" viewBox="0 0 5.2917 5.2917"
-            xmlns="http://www.w3.org/2000/svg">
-            <g transform="translate(0 -291.71)">
-                <circle cx="2.6458" cy="294.35" r="2.4626" style="fill:none;stroke-opacity:.99497;stroke-width:.26458;stroke:#000;" />
-                <circle class="dot" cx="2.6458" cy="294.35" style="fill-rule:evenodd;" />
-            </g>
-        </svg>
-        <label style="display:none"></label>
-        <svg class="absol-radio-icon absol-radio-icon-right" width="20" height="20" version="1.1" viewBox="0 0 5.2917 5.2917"
-            xmlns="http://www.w3.org/2000/svg">
-            <g transform="translate(0 -291.71)">
-                <circle cx="2.6458" cy="294.35" r="2.4626" style="fill:none;stroke-opacity:.99497;stroke-width:.26458;stroke:#000" />
-                <circle class="dot" cx="2.6458" cy="294.35" style="fill-rule:evenodd;" />
-            </g>
-        </svg>
-    </div>`);
+    var res = _(
+        '<div class="absol-radio">' +
+        '    <input type="radio" />' +
+        '    <svg class="absol-radio-icon absol-radio-icon-left" width="20" height="20" version="1.1" viewBox="0 0 5.2917 5.2917"' +
+        '        xmlns="http://www.w3.org/2000/svg">' +
+        '        <g transform="translate(0 -291.71)">' +
+        '            <circle cx="2.6458" cy="294.35" r="2.4626" style="fill:none;stroke-opacity:.99497;stroke-width:.26458;stroke:#000;" />' +
+        '            <circle class="dot" cx="2.6458" cy="294.35" r= "0.92604" style="fill-rule:evenodd;" />' +
+        '        </g>' +
+        '    </svg>' +
+        '    <label style="display:none"></label>' +
+        '    <svg class="absol-radio-icon absol-radio-icon-right" width="20" height="20" version="1.1" viewBox="0 0 5.2917 5.2917"' +
+        '        xmlns="http://www.w3.org/2000/svg">' +
+        '        <g transform="translate(0 -291.71)">' +
+        '            <circle cx="2.6458" cy="294.35" r="2.4626" style="fill:none;stroke-opacity:.99497;stroke-width:.26458;stroke:#000" />' +
+        '            <circle class="dot" cx="2.6458" cy="294.35"  r= "0.92604" style="fill-rule:evenodd;  " />' +
+        '        </g>' +
+        '    </svg>' +
+        '</div>'
+    );
     res.defineEvent('change');
     res.$input = $('input', res);
     res.$label = $('label', res);
@@ -989,19 +978,16 @@ absol.ShareCreator.radio = function () {
 
 
     res.on('click', function (event) {
-        if (!res.checked){
+        if (!res.checked) {
             res.checked = true;
             res.emit('change', event);
         }
     });
 
-    res.sync = res.afterAttached().then(function(){
+    res.sync = res.afterAttached().then(function () {
         res.checked = res.checked;
     });
 
-
-    res.$label = $('label');
-   
     return res;
 };
 
@@ -1014,8 +1000,10 @@ absol.ShareCreator.radio.property = {
                 var _this = this;
                 setTimeout(function () {
                     function finish(event) {
-                        if (!_this.checked) _this.removeClass('checked')
-                        document.body.removeEventListener('click', finish, false);
+                        if (!_this.checked) {
+                            _this.removeClass('checked')
+                            document.body.removeEventListener('click', finish, false);
+                        }
                     }
                     document.body.addEventListener('click', finish, false);
                 }, 100);
@@ -1036,15 +1024,15 @@ absol.ShareCreator.radio.property = {
         get: function () {
             return this.$input.getAttribute('name');
         }
-    }, 
-    text:{
-        set:function(value){
-            value = (value||'').trim();
+    },
+    text: {
+        set: function (value) {
+            value = (value || '').trim();
             this.$label.innerHTML = value;
-            if (value.length==0) this.$label.addStyle('display', 'none');
+            if (value.length == 0) this.$label.addStyle('display', 'none');
             else this.$label.removeStyle('display');
         },
-        get:function(){
+        get: function () {
 
         }
     }
