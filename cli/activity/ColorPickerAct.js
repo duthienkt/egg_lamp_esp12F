@@ -23,20 +23,36 @@ ColorPickerAct.prototype.getView = function () {
     this.$view = _({
         class: ['el-act', 'el-color-picker-act'],
         child: [
-          {
-              class:'el-color-picker-color',
-              style:{
-                  'background-color':'red'
-              }, 
-              child:{
-                  class:'el-color-picker-sat',
-                  child:'.el-color-picker-val'
-              }
-          }
+            {
+                class: 'el-color-picker-color-container',
+                child: {
+                    class: 'el-color-picker-color',
+                    style: {
+                        'background-color': 'red'
+                    },
+                    child: {
+                        class: 'el-color-picker-sat',
+                        child: '.el-color-picker-val'
+                    }
+                }
+            }
         ]
     });
-    
+    //standar screen is 411x731,
+    this.$attachook = _('attachhook').addTo(this.$view)
+        .on('error', function () {
+            Dom.addToResizeSystem(this);
+            this.requestUpdateSize();
+        });
+    this.$attachook.requestUpdateSize = this.updateSize.bind(this);
     return this.$view;
+};
+
+ColorPickerAct.prototype.updateSize = function () {
+    var bound = this.$view.getBoundingClientRect();
+    this.$view.style.fontSize = Math.min(bound.width, bound.height) / 35 + 'px';
+    if (bound.width > bound.height) this.$view.addClass('landscape');
+    else this.$view.removeClass('landscape');
 };
 
 export default ColorPickerAct;

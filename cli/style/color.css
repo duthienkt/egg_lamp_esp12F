@@ -1,6 +1,22 @@
-.el-color-picker-act .el-color-picker-color{
-    width: 100px;
-    height:100px;
+.el-color-picker-act.lanscapse {
+    /* 'todo' */
+}
+
+
+.el-color-picker-act .el-color-picker-color {
+    width: 25em;
+    height: 25em;
+}
+
+.el-color-picker-color-container {
+    display: block;
+    text-align: center;
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+.el-color-picker-color-container>.el-color-picker-color {
+    display: inline-block;
 }
 
 .el-color-picker {
@@ -176,8 +192,8 @@
     background-color: #000;
 }
 
-.el-color-picker-text-container> span,
-.el-color-picker-text-container> div{
+.el-color-picker-text-container>span,
+.el-color-picker-text-container>div {
     line-height: 2.5;
     font-size: 0.8em;
 }
