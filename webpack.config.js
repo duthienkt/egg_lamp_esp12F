@@ -14,7 +14,7 @@ function resolveEntry(entryInProject){
 var packages = {
     default: {
         entry: ["./cli/index.js"],
-        filename: "./dist/absol.js"
+        filename: "./dist/index.js"
     }
 }
 
