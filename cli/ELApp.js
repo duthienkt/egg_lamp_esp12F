@@ -34,6 +34,13 @@ ELApp.prototype.getView = function(){
     this.$view = _({
         class:'el-app'
     });
+
+    this.$attachook = _('attachhook').addTo(this.$view)
+        .on('error', function () {
+            Dom.addToResizeSystem(this);
+            this.requestUpdateSize();
+        });
+    this.$attachook.requestUpdateSize = this.updateSize.bind(this);
     return this.$view;
 };
 
@@ -49,6 +56,14 @@ ELApp.prototype.onStart = function(){
 
 ELApp.prototype.onDestroy = function(){
     this.getView().remove();  
+};
+
+
+ELApp.prototype.updateSize = function () {
+    var bound = this.$view.getBoundingClientRect();
+    this.$view.style.fontSize = Math.min(bound.width, bound.height, Math.max(bound.width, bound.height)*0.618) / 35 + 'px';
+    if (bound.width > bound.height) this.$view.addClass('landscape');
+    else this.$view.removeClass('landscape');
 };
 
 export default new ELApp();
