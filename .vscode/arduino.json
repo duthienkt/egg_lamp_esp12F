@@ -1,5 +1,8 @@
 {
-    "board": "esp8266:esp8266:d1",
-    "configuration": "CpuFrequency=80,UploadSpeed=921600,FlashSize=4M3M",
-    "port": "COM4"
+    "board": "esp8266:esp8266:nodemcuv2",
+    "configuration": "xtal=80,vt=flash,exception=disabled,eesz=4M,ip=lm2f,dbg=Disabled,lvl=None____,wipe=none,baud=115200",
+    "port": "COM3",
+    "sketch": "esp_lamp/esp_lamp.ino",
+    "output": "./build",
+    "programmer": "ArduinoISP"
 }
